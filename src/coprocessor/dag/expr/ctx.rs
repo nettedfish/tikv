@@ -14,9 +14,9 @@
 use std::mem;
 use std::sync::Arc;
 
+use super::{Error, Result};
 use chrono::FixedOffset;
 use tipb::select;
-use super::{Error, Result};
 
 /// Flags are used by `DAGRequest.flags` to handle execution mode, like how to handle
 /// truncate error.
@@ -129,10 +129,7 @@ impl Default for EvalContext {
     fn default() -> EvalContext {
         let cfg = Arc::new(EvalConfig::default());
         let warnings = cfg.new_eval_warnings();
-        EvalContext {
-            cfg,
-            warnings,
-        }
+        EvalContext { cfg, warnings }
     }
 }
 const ONE_DAY: i64 = 3600 * 24;
@@ -140,10 +137,7 @@ const ONE_DAY: i64 = 3600 * 24;
 impl EvalContext {
     pub fn new(cfg: Arc<EvalConfig>) -> EvalContext {
         let warnings = cfg.new_eval_warnings();
-        EvalContext {
-            cfg,
-            warnings,
-        }
+        EvalContext { cfg, warnings }
     }
 
     pub fn handle_truncate(&mut self, is_truncated: bool) -> Result<()> {
@@ -174,8 +168,8 @@ impl EvalContext {
 
 #[cfg(test)]
 mod test {
-    use std::sync::Arc;
     use super::*;
+    use std::sync::Arc;
 
     #[test]
     fn test_handle_truncate() {

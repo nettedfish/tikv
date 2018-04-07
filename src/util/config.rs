@@ -14,15 +14,15 @@
 use std::error::Error;
 use std::fmt::{self, Write};
 use std::fs;
+use std::net::{SocketAddrV4, SocketAddrV6};
+use std::ops::{Div, Mul};
 use std::path::Path;
 use std::str::{self, FromStr};
 use std::time::Duration;
-use std::net::{SocketAddrV4, SocketAddrV6};
-use std::ops::{Div, Mul};
 
-use url;
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde::de::{self, Unexpected, Visitor};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use url;
 
 use util;
 
@@ -55,9 +55,9 @@ quick_error! {
 pub mod compression_type_level_serde {
     use std::fmt;
 
-    use serde::{Deserializer, Serializer};
     use serde::de::{Error, SeqAccess, Unexpected, Visitor};
     use serde::ser::SerializeSeq;
+    use serde::{Deserializer, Serializer};
 
     use rocksdb::DBCompressionType;
 
@@ -143,9 +143,9 @@ pub mod order_map_serde {
     use std::hash::Hash;
     use std::marker::PhantomData;
 
-    use serde::{Deserialize, Deserializer, Serialize, Serializer};
     use serde::de::{MapAccess, Visitor};
     use serde::ser::SerializeMap;
+    use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
     use util::collections::HashMap;
 
@@ -626,8 +626,8 @@ pub fn canonicalize_sub_path(path: &str, sub_path: &str) -> Result<String, Box<E
 
 #[cfg(unix)]
 pub fn check_max_open_fds(expect: u64) -> Result<(), ConfigError> {
-    use std::mem;
     use libc;
+    use std::mem;
 
     unsafe {
         let mut fd_limit = mem::zeroed();
@@ -750,12 +750,12 @@ pub fn check_kernel() -> Vec<ConfigError> {
 
 #[cfg(target_os = "linux")]
 mod check_data_dir {
+    use libc;
+    use std::ffi::{CStr, CString};
     use std::fs::{self, File};
     use std::io::Read;
-    use std::ffi::{CStr, CString};
     use std::path::Path;
     use std::sync::Mutex;
-    use libc;
 
     use super::{canonicalize_path, ConfigError};
 
@@ -1120,7 +1120,8 @@ mod test {
     fn test_parse_hash_map() {
         #[derive(Serialize, Deserialize)]
         struct MapHolder {
-            #[serde(with = "super::order_map_serde")] m: HashMap<String, String>,
+            #[serde(with = "super::order_map_serde")]
+            m: HashMap<String, String>,
         }
 
         let legal_cases = vec![
@@ -1207,7 +1208,8 @@ mod test {
     fn test_parse_compression_type() {
         #[derive(Serialize, Deserialize)]
         struct CompressionTypeHolder {
-            #[serde(with = "compression_type_level_serde")] tp: [DBCompressionType; 7],
+            #[serde(with = "compression_type_level_serde")]
+            tp: [DBCompressionType; 7],
         }
 
         let all_tp = vec![
@@ -1283,8 +1285,8 @@ mod test {
     #[cfg(target_os = "linux")]
     #[test]
     fn test_check_kernel() {
-        use std::i64;
         use super::check_kernel::{check_kernel_params, Checker};
+        use std::i64;
 
         // The range of vm.swappiness is from 0 to 100.
         let table: Vec<(&str, i64, Box<Checker>, bool)> = vec![

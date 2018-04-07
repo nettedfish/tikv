@@ -11,21 +11,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// This mod implemented a wrapped future pool that supports `on_tick()` which is driven by
-/// tasks and is invoked no less than the specific interval.
-
-use std::fmt;
-use std::cell::{Cell, RefCell, RefMut};
-use std::sync::{mpsc, Arc};
-use std::sync::atomic::{AtomicUsize, Ordering};
-use std::thread;
-use std::time::Duration;
 use futures::Future;
 use futures_cpupool::{self as cpupool, CpuFuture, CpuPool};
+use std::cell::{Cell, RefCell, RefMut};
+/// This mod implemented a wrapped future pool that supports `on_tick()` which is driven by
+/// tasks and is invoked no less than the specific interval.
+use std::fmt;
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::{mpsc, Arc};
+use std::thread;
+use std::time::Duration;
 
 use util;
-use util::time::Instant;
 use util::collections::HashMap;
+use util::time::Instant;
 
 pub trait Context: fmt::Debug + Send {
     /// Will be invoked periodically (no less than specified interval).
@@ -214,10 +213,10 @@ impl<T: Context + 'static> FuturePool<T> {
 
 #[cfg(test)]
 mod tests {
+    use futures::future;
+    use std::sync::mpsc::{channel, Sender};
     use std::thread;
     use std::time::Duration;
-    use std::sync::mpsc::{channel, Sender};
-    use futures::future;
 
     pub use super::*;
 
