@@ -56,13 +56,13 @@ impl RegionStat {
         approximate_size: u64,
     ) -> RegionStat {
         RegionStat {
-            down_peers: down_peers,
-            pending_peers: pending_peers,
-            written_bytes: written_bytes,
-            written_keys: written_keys,
-            read_bytes: read_bytes,
-            read_keys: read_keys,
-            approximate_size: approximate_size,
+            down_peers,
+            pending_peers,
+            written_bytes,
+            written_keys,
+            read_bytes,
+            read_keys,
+            approximate_size,
         }
     }
 }
@@ -76,8 +76,8 @@ pub struct RegionInfo {
 impl RegionInfo {
     pub fn new(region: metapb::Region, leader: Option<metapb::Peer>) -> RegionInfo {
         RegionInfo {
-            region: region,
-            leader: leader,
+            region,
+            leader,
         }
     }
 }

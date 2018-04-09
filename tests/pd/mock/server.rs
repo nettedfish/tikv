@@ -83,7 +83,7 @@ impl Server {
         }
 
         server.start();
-        Server { server: server }
+        Server { server }
     }
 
     pub fn bind_addrs(&self) -> Vec<(String, u16)> {

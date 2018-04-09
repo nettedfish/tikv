@@ -134,7 +134,7 @@ impl<T: Display> Scheduler<T> {
         Scheduler {
             name: Arc::new(name.into()),
             counter: Arc::new(counter),
-            sender: sender,
+            sender,
         }
     }
 
@@ -192,7 +192,7 @@ pub struct Builder<S: Into<String>> {
 impl<S: Into<String>> Builder<S> {
     pub fn new(name: S) -> Self {
         Builder {
-            name: name,
+            name,
             batch_size: 1,
             pending_capacity: usize::MAX,
         }

@@ -277,7 +277,7 @@ impl Lease {
     pub fn new(max_lease: Duration) -> Lease {
         Lease {
             bound: None,
-            max_lease: max_lease,
+            max_lease,
         }
     }
 
