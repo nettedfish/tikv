@@ -970,6 +970,7 @@ pub fn flush_engine_properties(engine: &DB, name: &str) {
     }
 }
 
+#[cfg_attr(rustfmt, rustfmt_skip)]
 lazy_static! {
     pub static ref STORE_ENGINE_SIZE_GAUGE_VEC: IntGaugeVec = register_int_gauge_vec!(
         "tikv_engine_size_bytes",
